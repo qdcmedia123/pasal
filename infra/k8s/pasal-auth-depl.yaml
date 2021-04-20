@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pasal-auth-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pasal-auth
+  template:
+    metadata:
+      labels:
+        app: pasal-auth
+    spec:
+      containers:
+        - name: pasal-auth
+          image: bharatrose1/pasal-auth
+          env:
+            - name: MONGO_URI
+              value: 'mongodb://pasal-auth-mongo-srv:27017/auth'
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY
+---
+apiVersion: v1
+kind: Service 
+metadata:
+  name: pasal-auth-srv
+spec:
+  selector:
+    app: pasal-auth
+  ports:
+    - name: pasal-auth
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
