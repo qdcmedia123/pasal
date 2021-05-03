@@ -3,7 +3,7 @@ import 'express-async-errors';
 import {json} from 'body-parser';
 import cookieSession from 'cookie-session';
 import {signInRouter} from './routes/signin';
-
+import {signUpRouter} from './routes/signup';
 const app = express();
 app.set('trust proxy', true);
 app.use(json());
@@ -15,6 +15,7 @@ app.use(
 );
 
 app.use(signInRouter);
+app.use(signUpRouter);
 app.all('*', async(req, res) => {
     res.end('Not found');
 });
