@@ -1,6 +1,6 @@
 import {Request, Response, NextFunction} from 'express';
 import jwt from 'jsonwebtoken';
-import { RequestValidationError } from '../errors/request-validation-error';
+
 
 interface UserPayload {
     id:string;
