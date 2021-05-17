@@ -11,6 +11,7 @@ interface UserAttrs {
   email: string;
   password: string;
   usertype: usertype;
+  permissions: object;
 }
 
 // An interface descript the properties that a user document pass
@@ -18,6 +19,8 @@ interface UserDoc extends mongoose.Document {
   email: string;
   password: string;
   usertype: usertype;
+  permissions: object;
+  //permission: object;
 }
 
 // An interface define build function is available to the model
@@ -41,6 +44,9 @@ const userSchema = new mongoose.Schema(
       enum: Object.values(usertype),
       required: true,
     },
+    // permissions: {
+    //   type: Array,
+    // }
   },
   {
     toJSON: {

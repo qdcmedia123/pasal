@@ -4,6 +4,7 @@ import {json} from 'body-parser';
 import cookieSession from 'cookie-session';
 import {signInRouter} from './routes/signin';
 import {signupRouter} from './routes/signup';
+import {permissionRouter} from './routes/permission';
 import { errorHandler, NotFoundError } from './common';
 const app = express();
 app.set('trust proxy', true);
@@ -17,6 +18,7 @@ app.use(
 
 app.use(signInRouter);
 app.use(signupRouter);
+app.use(permissionRouter)
 app.all('*', async(req, res) => {
     res.end('Not found');
 });

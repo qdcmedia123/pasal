@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import {CustomError} from '@wealthface/common';
+import {CustomError} from '../errors/custom-error';
 
 
 export const errorHandler = (
@@ -11,7 +11,7 @@ export const errorHandler = (
   if (err instanceof CustomError) {
     return res.status(err.statusCode).send({ errors: err.serializeErrors() });
   }
-  
+  console.log(err);
   res.status(400).send({
     errors: [{message: 'Something went wrong.'}],
   });

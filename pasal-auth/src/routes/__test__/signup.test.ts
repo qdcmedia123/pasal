@@ -30,7 +30,18 @@ it("return a 400 with missing email and password", async () => {
       password: "",
     })
     .expect(400);
-    console.log(response.text)
+    
+});
+
+it('throws 400 error if no permission is provided', async() => {
+  await request(app)
+    .post("/api/users/signup")
+    .send({
+      email: "bharatrose1@gmail.com",
+      password: "thisismylife",
+      usertype: "seller",
+    })
+    .expect(400);
 });
 
 it("registered user, if username, password and usertype is supplied", async () => {
@@ -40,6 +51,7 @@ it("registered user, if username, password and usertype is supplied", async () =
       email: "bharatrose1@gmail.com",
       password: "thisismylife",
       usertype: "seller",
+      permissions: ['list_clients']
     })
     .expect(201);
 });
@@ -51,6 +63,7 @@ it("disallowed duplicate email, usertype registration", async () => {
       email: "bharatrose1@gmail.com",
       password: "thisismylife",
       usertype: "seller",
+      permissions: ['list_clients']
     })
     .expect(201);
 
@@ -60,6 +73,7 @@ it("disallowed duplicate email, usertype registration", async () => {
       email: "bharatrose1@gmail.com",
       password: "thisismylife",
       usertype: "seller",
+      permissions: ['list_clients']
     })
     .expect(400);
 });
@@ -71,6 +85,7 @@ it("will register user with same email but different usertype", async() => {
     email: "bharatrose1@gmail.com",
     password: "thisismylife",
     usertype: "seller",
+    permissions: ['list_clients']
   })
   .expect(201);
 
@@ -80,6 +95,7 @@ it("will register user with same email but different usertype", async() => {
     email: "bharatrose1@gmail.com",
     password: "thisismylife",
     usertype: "buyer",
+    permissions: ['list_clients']
   })
   .expect(201);
 });
@@ -91,6 +107,7 @@ it('will set cookie to client after sucessfull, registration', async() => {
     email: "bharatrose1@gmail.com",
     password: "thisismylife",
     usertype: "seller",
+    permissions: ['list_clients']
   })
   .expect(201);
   expect(response.get('Set-Cookie')).toBeDefined();
