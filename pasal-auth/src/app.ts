@@ -6,6 +6,8 @@ import {signInRouter} from './routes/signin';
 import {signupRouter} from './routes/signup';
 import {permissionRouter} from './routes/permission';
 import { errorHandler, NotFoundError } from './common';
+import {currentUserRouter} from './routes/current-user';
+
 const app = express();
 app.set('trust proxy', true);
 app.use(json());
@@ -16,6 +18,7 @@ app.use(
     })
 );
 
+app.use(currentUserRouter);
 app.use(signInRouter);
 app.use(signupRouter);
 app.use(permissionRouter)

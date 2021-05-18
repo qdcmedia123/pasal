@@ -7,9 +7,10 @@ import { checkPermissionAllSet } from "./utils";
 
 const router = express.Router();
 
-router.get("/api/users/test", async (req: Request, res: Response) => {
-  res.send("All is good");
+router.post("/api/users/test", validateRequest, async (req: Request, res: Response) => {
+  res.send(req.body);
 });
+
 router.post(
   "/api/users/signup",
   [
@@ -26,6 +27,7 @@ router.post(
   ],
   validateRequest,
   async (req: Request, res: Response) => {
+    console.log(req.body);
     const { email, password, usertype, permissions } = req.body;
     const existingUser = await User.findOne({ email, usertype });
 

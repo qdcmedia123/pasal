@@ -29,6 +29,7 @@ router.post(
   ],
   validateRequest,
   async (req: Request, res: Response) => {
+    console.log(req.body);
     const { name, cat, guard_name, role } = req.body;
 
     const existingPermission = await Permission.findOne({ name, cat });
