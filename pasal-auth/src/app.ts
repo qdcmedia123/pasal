@@ -5,7 +5,7 @@ import cookieSession from 'cookie-session';
 import {signInRouter} from './routes/signin';
 import {signupRouter} from './routes/signup';
 import {permissionRouter} from './routes/permission';
-import { errorHandler, NotFoundError } from './common';
+import { errorHandler, NotFoundError, currentUser } from './common';
 import {currentUserRouter} from './routes/current-user';
 
 const app = express();
@@ -18,6 +18,7 @@ app.use(
     })
 );
 
+app.use(currentUser);
 app.use(currentUserRouter);
 app.use(signInRouter);
 app.use(signupRouter);
