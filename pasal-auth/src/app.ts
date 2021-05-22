@@ -5,7 +5,7 @@ import cookieSession from 'cookie-session';
 import {signInRouter} from './routes/signin';
 import {signupRouter} from './routes/signup';
 import {permissionRouter} from './routes/permission';
-import { errorHandler, NotFoundError, currentUser } from './common';
+import { errorHandler, NotFoundError, currentUser } from '@pasal/common';
 import {currentUserRouter} from './routes/current-user';
 
 const app = express();

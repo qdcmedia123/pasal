@@ -1,17 +1,17 @@
 import express, { request, Request, Response, NextFunction } from "express";
 import { body } from "express-validator";
 import { User } from "../models/user";
-import { validateRequest, BadRequestError } from "../common";
+import { validateRequest, BadRequestError } from "@pasal/common";
 import jwt from "jsonwebtoken";
 import { checkPermissionAllSet } from "./utils";
-import { HasRole, requireAuth } from "../common";
+import { hasRole, requireAuth } from "@pasal/common";
 
 const router = express.Router();
 
 router.post(
   "/api/users/test",
   requireAuth,
-  HasRole(["list_leads"]),
+  hasRole(["list_leads"]),
   async (req: Request, res: Response) => {
     res.send(req.body);
   }

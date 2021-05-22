@@ -1,10 +1,11 @@
 // @ts-nocheck
 import { Request, Response, NextFunction } from "express";
-import { NotAuthorizedError } from "../../common";
+import { NotAuthorizedError } from "..";
 
-export function HasRole(role: object) {
+export function hasRole(role: object) {
   return function (req: Request, res: Response, next: NextFunction) {
-    const { permissions } = req.currentUser;
+    if(req.currentUser) {
+        const permissions = req.currentUser?.permissions;
     if (role) {
       const isAuthorized = role.filter((item) => {
         return permissions.indexOf(item) !== -1;
@@ -17,4 +18,6 @@ export function HasRole(role: object) {
       next();
     }
   };
+    }
+    
 }
