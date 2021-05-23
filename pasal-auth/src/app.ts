@@ -5,8 +5,10 @@ import cookieSession from 'cookie-session';
 import {signInRouter} from './routes/signin';
 import {signupRouter} from './routes/signup';
 import {permissionRouter} from './routes/permission';
+import {resetPasswordRouter} from './routes/reset-password';
 import { errorHandler, NotFoundError, currentUser } from '@pasal/common';
 import {currentUserRouter} from './routes/current-user';
+
 
 const app = express();
 app.set('trust proxy', true);
@@ -22,7 +24,8 @@ app.use(currentUser);
 app.use(currentUserRouter);
 app.use(signInRouter);
 app.use(signupRouter);
-app.use(permissionRouter)
+app.use(resetPasswordRouter);
+app.use(permissionRouter);
 app.all('*', async(req, res) => {
     res.end('Not found');
 });

@@ -1,6 +1,6 @@
 import express, {Request, Response} from 'express';
 import {body} from 'express-validator';
-import {validateRequest} from '@wealthface/common';
+import {validateRequest} from '@pasal/common';
 const router = express.Router();
 
 
