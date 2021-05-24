@@ -8,9 +8,6 @@ enum updated {
 interface ResetPasswordAttrs {
     user_id:string;
     code: string;
-    created_at: Date;
-    expire_at: Date;
-    updated: updated
 }
 
 interface ResetPasswordDoc extends mongoose.Document {
@@ -22,11 +19,7 @@ interface ResetPasswordDoc extends mongoose.Document {
 }
 
 interface ResetPasswordModel extends mongoose.Model<ResetPasswordDoc> {
-    user_id:string;
-    code: string;
-    created_at: Date;
-    expire_at: Date;
-    updated: updated
+   build(attrs: ResetPasswordAttrs) : ResetPasswordDoc
 }
 
 const resetPasswordSchema = new mongoose.Schema({
@@ -44,6 +37,7 @@ const resetPasswordSchema = new mongoose.Schema({
     },
     expire_at: {
         type:Date,
+        default:() => new Date(+new Date() + 8 * 60 * 60 * 1000),
         required:true
     },
     updated: {
@@ -67,4 +61,4 @@ resetPasswordSchema.statics.build = (attrs: ResetPasswordAttrs) => {
 
 const ResetPassword = mongoose.model<ResetPasswordDoc, ResetPasswordModel>('ResetPassword', resetPasswordSchema);
 
-export {ResetPasswordModel}
+export {ResetPassword}
