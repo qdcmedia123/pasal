@@ -37,17 +37,40 @@ router.post('/api/users/updated_password',
 [
     body('code')
     .isLength({min: 24, max: 24})
-    .withMessage('Please provide valid id')
+    .withMessage('Please provide valid id'),
+    body('user_id')
+    .isLength({min: 24, max: 24})
+    .withMessage('Please provide valid id'),
+    body('password')
+     .isLength({min:4, max:10})
+     .withMessage('Please enter the password')
+     .custom((value, {req, path}) => {
+        if(value !== req.body.confirmPassword) {
+            throw new BadRequestError('Both password did not match')
+        } else {
+            return true;
+        }
+     })
+
+
 ],
 validateRequest,
 async(req: Request, res: Response) => {
-    const {code} = req.body;
+    const {code, user_id, password, confirm_password} = req.body;
     // Check the code is exist and expire at is not after 8 hr 
-    const isValid = await ResetPassword.findOne({code: code, expire_at: {$lt: new Date()}});
+    const isValid = await ResetPassword.findOne({user_id: user_id, code: code, expire_at: {$lt: new Date()}});
 
     if(isValid) {
         throw new BadRequestError(`Invalid code or code has been expired`);
     }
+
+    // Check user must exists as well 
+    const user = await User.findById(user_id);
+
+    if(!user){
+        throw new BadRequestError('Unable find the user');
+    }
+    
     // Otherwise update the password
     res.status(204).json({message: 'Password updated sucessfully'});
 });
