@@ -138,10 +138,8 @@ it("Will finall update the password with status kye 400", async () => {
     .send({
       code: decodeResponse.code,
       user_id: decodeResponse.user_id,
-      password: "hello",
-      confirmPassword: "hello",
+      password: "thisismylife",
+      confirmPassword: "thisismylife",
     })
     .expect(204);
-
-    // Finally update the password
 });
