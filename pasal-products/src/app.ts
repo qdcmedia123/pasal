@@ -2,13 +2,8 @@ import express from 'express';
 import 'express-async-errors';
 import {json} from 'body-parser';
 import cookieSession from 'cookie-session';
-import {signInRouter} from './routes/signin';
-import {signupRouter} from './routes/signup';
-import {signoutRouter} from './routes/signout';
-import {permissionRouter} from './routes/permission';
-import {resetPasswordRouter} from './routes/reset-password';
 import { errorHandler, NotFoundError, currentUser } from '@pasal/common';
-import {currentUserRouter} from './routes/current-user';
+import {createProductRouter} from './routes/new';
 
 
 const app = express();
@@ -20,14 +15,8 @@ app.use(
         secure: process.env.NODE_ENV !== 'test',
     })
 );
-
 app.use(currentUser);
-app.use(currentUserRouter);
-app.use(signInRouter);
-app.use(signupRouter);
-app.use(signoutRouter);
-app.use(resetPasswordRouter);
-app.use(permissionRouter);
+app.use(createProductRouter);
 app.all('*', async(req, res) => {
     res.end('Not found');
 });

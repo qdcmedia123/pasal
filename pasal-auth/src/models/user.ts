@@ -44,9 +44,9 @@ const userSchema = new mongoose.Schema(
       enum: Object.values(usertype),
       required: true,
     },
-    // permissions: {
-    //   type: Array,
-    // }
+    permissions: {
+      type: Array,
+    }
   },
   {
     toJSON: {
