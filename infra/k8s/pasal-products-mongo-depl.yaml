@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pasal-products-mongo-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pasal-products-mongo
+  template:
+    metadata:
+      labels:
+        app: pasal-products-mongo
+    spec:
+      containers:
+        - name: pasal-products
+          image: mongo
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pasal-products-mongo-srv
+spec:
+  selector:
+    app: pasal-products-mongo
+  ports:
+    - name: db
+      protocol: TCP
+      port: 27017
+      targetPort: 27017
