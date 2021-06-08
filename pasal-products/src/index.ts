@@ -1,7 +1,16 @@
 import { app } from "./app";
 import mongoose from 'mongoose';
+import rabbit from 'amqplib';
+
+const queuGroupName = 'ticket:create';
+const consumerTag = 'pasal-cluster-tag';
+const queueOptions = {durable:true, exclusive:false, autoDelete: false};
+
 
 const start = async() => {
+    if(!process.env.RABBIT_MQ_URL) {
+        throw new Error ('Rabbit MQ URL is not defined');
+    }
     if(!process.env.JWT_KEY) {
         throw new Error('JWT key must be defined');
     }
@@ -17,6 +26,22 @@ const start = async() => {
     console.log('connected to mongodb');
     } catch (error) {
         console.log(error);
+    }
+
+    try {
+        const conn = await rabbit.connect(process.env.RABBIT_MQ_URL);
+        const ch = await conn.createChannel();
+        try {
+            
+            await ch.assertQueue(queuGroupName, queueOptions);
+            await ch.sendToQueue(queuGroupName, Buffer.from(JSON.stringify({name: 'bharat', address: 'Abu Dhabi'})));
+            console.log(`${queuGroupName} message published`)
+        } catch (err) {
+            console.log(err);
+        }
+        
+    } catch (err) {
+        console.log(err)
     }
     
 } 

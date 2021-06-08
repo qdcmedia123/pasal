@@ -1,7 +1,12 @@
 import { app } from "./app";
 import mongoose from 'mongoose';
-
+import rabbit from 'amqplib';
+const queueOptions = {durable:true, exclusive:false, autoDelete: false};
+const queuGroupName = 'ticket:create';
 const start = async() => {
+    if(!process.env.RABBIT_MQ_URL) {
+        throw new Error ('Rabbit MQ URL is not defined');
+    }
     if(!process.env.JWT_KEY) {
         throw new Error('JWT key must be defined');
     }
@@ -17,6 +22,26 @@ const start = async() => {
     console.log('connected to mongodb');
     } catch (error) {
         console.log(error);
+    }
+
+    try {
+        const conn = await rabbit.connect(process.env.RABBIT_MQ_URL);
+        const ch = await conn.createChannel();
+        try {
+            await ch.assertQueue(queuGroupName , queueOptions);
+            // You can set alot of settings here 
+             ch.consume(queuGroupName, function(msg) {
+                if (msg !== null) {
+                  console.log(`message received from ${queuGroupName}`, JSON.parse(msg.content.toString()));
+                  ch.ack(msg);
+                }
+              });
+        } catch (err) {
+            console.log(err);
+        }
+        
+    } catch (err) {
+        console.log(err)
     }
     
 } 
