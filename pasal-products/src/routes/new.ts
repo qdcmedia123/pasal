@@ -2,6 +2,9 @@ import express, { Request, Response } from "express";
 import { body } from "express-validator";
 import { validateRequest, requireAuth, hasRole } from "@pasal/common";
 import { Product } from "../models/products";
+import { ProductCreatedPublisher } from "../events/publishers/product-created-publishere";
+import { rabbitMQWrapper } from "../rabbitmq-wrapper";
+
 const router = express.Router();
 
 router.post(
@@ -37,7 +40,11 @@ router.post(
       userId: req.currentUser!.id,
     });
     await product.save();
-    
+    console.log(rabbitMQWrapper.test);
+    new ProductCreatedPublisher(rabbitMQWrapper.client).publish({
+      version: product.version,
+      id: product.id
+    });
     res.status(201).json(product);
   }
 );
