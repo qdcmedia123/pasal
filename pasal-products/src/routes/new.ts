@@ -7,6 +7,11 @@ import { rabbitMQWrapper } from "../rabbitmq-wrapper";
 
 const router = express.Router();
 
+router.get("/api/products/v1/test", async(req, res) => {
+  res.send('Test is working');
+  // Hello
+});
+
 router.post(
   "/api/products/v1/new",
   requireAuth,
@@ -40,10 +45,13 @@ router.post(
       userId: req.currentUser!.id,
     });
     await product.save();
-    console.log(rabbitMQWrapper.test);
+    
     new ProductCreatedPublisher(rabbitMQWrapper.client).publish({
       version: product.version,
-      id: product.id
+      id: product.id,
+      userId: product.userId,
+      name: product.name,
+      availableItems:availableItems
     });
     res.status(201).json(product);
   }

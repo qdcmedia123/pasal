@@ -32,7 +32,7 @@ const start = async() => {
             // You can set alot of settings here 
              ch.consume(queuGroupName, function(msg) {
                 if (msg !== null) {
-                  console.log(`message received from ${queuGroupName}`, JSON.parse(msg.content.toString()));
+                  console.log(`message received from crap ${queuGroupName}`, JSON.parse(msg.content.toString()));
                   ch.ack(msg);
                 }
               });
@@ -48,5 +48,5 @@ const start = async() => {
 start();
 
 app.listen(3000, () => {
-    console.log(`Listening on port 3000`)
+    console.log(`Listening on port 3000 `)
 });

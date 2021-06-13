@@ -5,5 +5,11 @@ export interface ProductCreatedEvent {
     data: {
         version: number,
         id: string,
+        userId:string,
+        name?:string;
+        category?:string;
+        subCategory?:string;
+        availableItems?:string;
+        mediaLinks?:string;
     }
 }
