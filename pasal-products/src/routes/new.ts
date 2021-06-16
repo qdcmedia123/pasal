@@ -53,6 +53,7 @@ router.post(
       name: product.name,
       availableItems:availableItems
     });
+    
     res.status(201).json(product);
   }
 );

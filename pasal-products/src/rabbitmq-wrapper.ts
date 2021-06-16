@@ -1,7 +1,16 @@
-import rabbit, { Channel } from "amqplib";
+
+// @ts-nocheck
+import rabbit from "amqplib";
+import { queueGroupName } from "./common/queu-group-name";
+import { config } from './config/rabbit';
+import Rascal, { Broker } from 'rascal';
+
+
+const MBroker = Rascal.BrokerAsPromised;
+
 
 class RabbitMQWrapper {
-  private _client?: Channel;
+  private _client?: Broker;
 
   get client() {
     if(!this._client) {
@@ -11,24 +20,21 @@ class RabbitMQWrapper {
     return this._client;
   }
   
-  async connect(url: string, queuGroupName:string, exch:string, queueOptions:object = {}, rkey: string ) {
-    try {
-      const con = await rabbit.connect(url, "heartbeat=60");
-      const ch = await con.createChannel();
-      await ch.assertExchange(exch, 'direct', {durable: true}).catch(console.error);
-      await ch.assertQueue(queuGroupName, queueOptions);
-      await ch.bindQueue(queuGroupName, exch, rkey).catch(console.error);
-      this._client = ch;
-      console.log('Connected to RabbitMQ Server !');
-      return ch;
-    } catch (err) {
-      throw new Error(`Can not connect to rabbit mq server`+ err, );
-    }
-  }
+  async connect (queueGroupName:string) {
+    console.log("Publishing Event");
+    var msg = 'Hello World!';
+    const broker = await MBroker.create(config);
+    this._client = broker;
+    broker.on('error', console.error);
+    // const publication = await broker.publish(queueGroupName, msg);
+    // publication.on('error', console.error);
+    // console.log("Published")
 
-  test() {
-    return 'hello world'
   }
+ 
+
+
+ 
 }
 
 export const rabbitMQWrapper = new RabbitMQWrapper();

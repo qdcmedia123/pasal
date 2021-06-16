@@ -1,11 +1,11 @@
 import { app } from "./app";
 import mongoose from "mongoose";
-import rabbit from "amqplib";
 import { rabbitMQWrapper } from "./rabbitmq-wrapper";
+import { ProductCreatedListener  } from "./events/listeners/product-created-listener";
+
 const queuGroupName = "ticket:create";
-const exch = "test_exchange";
-const rkey = "rest_route";
-const queueOptions = { durable: true };
+
+
 
 const start = async () => {
   if (!process.env.RABBIT_MQ_URL) {
@@ -30,27 +30,20 @@ const start = async () => {
     console.log(error);
   }
 
-  try {
-    const ch = await rabbitMQWrapper.connect(
-      process.env.RABBIT_MQ_URL,
-      queuGroupName,
-      exch,
-      queueOptions,
-      rkey
+   try {
+    const ch = await rabbitMQWrapper.connect(queuGroupName
     );
-    try {
-      await ch.publish(
-        exch,
-        rkey,
-        Buffer.from(JSON.stringify({ name: "bharat", address: "Abu Dhabi" }))
-      );
-      console.log(`${queuGroupName} Again Publi`);
-    } catch (err) {
-      console.log(err);
-    }
   } catch (err) {
     console.log(err);
   }
+
+  try {
+    new ProductCreatedListener(rabbitMQWrapper.client).listen();
+  } catch (err) {
+    console.error(err)
+  }
+ 
+ 
 };
 
 start();

@@ -1,6 +1,8 @@
 import { app } from "../../app";
 import request from "supertest";
 
+import { rabbitMQWrapper } from '../../rabbitmq-wrapper'; 
+
 it("throw 401 un autorized error when there is no authentication", async () => {
   await request(app).post("/api/products/v1/new").send({}).expect(401);
 });
@@ -81,4 +83,5 @@ it("response with 201 code when product is created", async () => {
   console.log(parseResponse);
   expect(parseResponse.id).toBeDefined();
   expect(Object.entries(parseResponse).length).toStrictEqual(9);
+  expect(rabbitMQWrapper.client.publish).toHaveBeenCalled();
 });

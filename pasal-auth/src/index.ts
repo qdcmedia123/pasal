@@ -1,8 +1,30 @@
+// @ts-nocheck
 import { app } from "./app";
 import mongoose from 'mongoose';
 import rabbit from 'amqplib';
-const queueOptions = {durable:true, exclusive:false, autoDelete: false};
-const queuGroupName = 'ticket:create';
+import { config } from './config/rabbit';
+import Rascal from 'rascal';
+const Broker = Rascal.BrokerAsPromised;
+const queuGroupName = "product:created";
+
+async function rascal_consume(){
+    
+    console.log("Consuming");
+    const broker = await Broker.create(config);
+    broker.on('error', console.error);
+    const subscription = await broker.subscribe(queuGroupName, 'b1');
+    subscription.on('message', (message, content, ackOrNack)=>{
+        console.log(content);
+        ackOrNack();
+        //subscription.cancel(); Why we cancel the subscription 
+    });
+    subscription.on('error', console.error);
+    subscription.on('invalid_content', (err, message, ackOrNack) =>{
+      console.log('Failed to parse message');
+    });
+  }
+
+
 const start = async() => {
     if(!process.env.RABBIT_MQ_URL) {
         throw new Error ('Rabbit MQ URL is not defined');
@@ -19,31 +41,32 @@ const start = async() => {
             useUnifiedTopology: true,
             useCreateIndex: true
         });
-    console.log('connected to mongod');
+    console.log('connected to mongodd');
     } catch (error) {
         console.log(error);
     }
 
-    try {
-        const conn = await rabbit.connect(process.env.RABBIT_MQ_URL);
-        const ch = await conn.createChannel();
-        try {
-            await ch.assertQueue(queuGroupName , queueOptions);
-            // You can set alot of settings here 
-             ch.consume(queuGroupName, function(msg) {
-                if (msg !== null) {
-                  console.log(`message received from crap ${queuGroupName}`, JSON.parse(msg.content.toString()));
-                  ch.ack(msg);
-                }
-              });
-        } catch (err) {
-            console.log(err);
-        }
+    // try {
+    //     const conn = await rabbit.connect(process.env.RABBIT_MQ_URL);
+    //     const ch = await conn.createChannel();
+    //     try {
+    //         await ch.assertQueue(queuGroupName , queueOptions);
+    //         // You can set alot of settings here 
+    //          ch.consume(queuGroupName, function(msg) {
+    //             if (msg !== null) {
+    //               console.log(`message received from grou ${queuGroupName}`, JSON.parse(msg.content.toString()));
+    //               ch.ack(msg);
+    //             }
+    //           });
+    //     } catch (err) {
+    //         console.log(err);
+    //     };
         
-    } catch (err) {
-        console.log(err)
-    }
+    // } catch (err) {
+    //     console.log(err)
+    // }
     
+    rascal_consume().catch(console.error);
 } 
 start();
 
