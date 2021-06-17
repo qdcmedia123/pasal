@@ -31,8 +31,7 @@ const start = async () => {
   }
 
    try {
-    const ch = await rabbitMQWrapper.connect(queuGroupName
-    );
+    const ch = await rabbitMQWrapper.connect();
   } catch (err) {
     console.log(err);
   }

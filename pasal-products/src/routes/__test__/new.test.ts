@@ -83,5 +83,6 @@ it("response with 201 code when product is created", async () => {
   console.log(parseResponse);
   expect(parseResponse.id).toBeDefined();
   expect(Object.entries(parseResponse).length).toStrictEqual(9);
+  console.log(rabbitMQWrapper)
   expect(rabbitMQWrapper.client.publish).toHaveBeenCalled();
 });
