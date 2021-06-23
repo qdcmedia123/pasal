@@ -1,11 +1,11 @@
 //import { config } from "./config/rabbit";
-import { config } from "@pasal/common";
+import { config } from '@pasal/common';
 import { BrokerAsPromised, withDefaultConfig } from "rascal";
 
 class RabbitMQWrapper {
   private _client?: BrokerAsPromised;
 
-   get client() {
+  get client() {
     if (!this._client) {
       throw new Error(`Could not connect to Rabbit`);
     }

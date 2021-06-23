@@ -1,10 +1,10 @@
+//@ts-nocheck
 import express, { Request, Response } from "express";
 import { body } from "express-validator";
 import { validateRequest, requireAuth, hasRole } from "@pasal/common";
 import { Product } from "../models/products";
 import { ProductCreatedPublisher } from "../events/publishers/product-created-publishere";
 import { rabbitMQWrapper } from "../rabbitmq-wrapper";
-
 const router = express.Router();
 
 router.get("/api/products/v1/test", async(req, res) => {

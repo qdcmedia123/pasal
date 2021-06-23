@@ -2,8 +2,8 @@ export const rabbitMQWrapper =  {
     client: {
         publish: jest
            .fn()
-           .mockImplementation((data: string, callback: () => void) => {
-            
+           .mockImplementation((subject:string, data: string, callback: () => void) => {
+          
         })
     }
 }
