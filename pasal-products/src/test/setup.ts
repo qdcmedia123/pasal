@@ -17,6 +17,7 @@ declare global {
 jest.mock('../rabbitmq-wrapper');
 
 beforeAll(async() => {
+    process.env.NODE_ENV = 'test';
     process.env.JWT_KEY = 'asdf';
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
     mongo = new MongoMemoryServer();

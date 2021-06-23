@@ -1,39 +1,34 @@
-export const config = {
-    "vhosts": {
-      "test": {
-        "connection": {
-          "url": "amqp://rabbitmq-srv:5672"
-          },
-           "exchanges": {
-              "test_exchange": {
-                 "assert": true,
-                 "type": "direct"
-              }
+import { BrokerConfig  } from "rascal";
+
+export const config: BrokerConfig = {
+   vhosts: {
+       '/': {
+           connection: {
+               url: 'amqp://rabbitmq-srv:5672',
+               retry: {
+                   min: 1000,
+                   max: 60000,
+                   factor: 2,
+                   strategy: "exponential"
+               }
            },
-           "queues": [
-              "test_queue"
-           ],
-           "bindings": {
-              "b1": {
-                 "source": "test_exchange",
-                 "destination": "test_queue",
-                 "destinationType": "queue",
-                 "bindingKey": "test_route"
-              }
+           exchanges: ['demo_ex'],
+           queues: ['demo_q'],
+           bindings: ['demo_ex[a.b.c] -> demo_q'],
+           publications: {
+            "product:created": {
+                   exchange: 'demo_ex',
+                   routingKey: 'a.b.c',
+               },
            },
-           "publications": {
-              "product:created": {
-                 "vhost": "test",
-                 "exchange": "test_exchange",
-                 "routingKey": "test_route"
-              }
+           subscriptions: {
+            "product:created": {
+                   queue: 'demo_q',
+                   prefetch: 3,
+               },
            },
-           "subscriptions": {
-              "product:created": {
-                 "queue": "test_queue",
-                 "prefetch": 1
-              }
-           }
-        }
-     }
+           
+           
+       },
+   },
 };

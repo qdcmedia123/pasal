@@ -80,7 +80,6 @@ it("response with 201 code when product is created", async () => {
     })
     .expect(201);
   const parseResponse = JSON.parse(response.text);
-  console.log(parseResponse);
   expect(parseResponse.id).toBeDefined();
   expect(Object.entries(parseResponse).length).toStrictEqual(9);
   console.log(rabbitMQWrapper)

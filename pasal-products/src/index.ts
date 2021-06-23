@@ -1,11 +1,7 @@
+
 import { app } from "./app";
 import mongoose from "mongoose";
 import { rabbitMQWrapper } from "./rabbitmq-wrapper";
-import { ProductCreatedListener  } from "./events/listeners/product-created-listener";
-
-const queuGroupName = "ticket:create";
-
-
 
 const start = async () => {
   if (!process.env.RABBIT_MQ_URL) {
@@ -17,8 +13,6 @@ const start = async () => {
   if (!process.env.MONGO_URI) {
     throw new Error("MONGO_URI must be defined");
   }
-
-
   try {
     await mongoose.connect(process.env.MONGO_URI, {
       useNewUrlParser: true,
@@ -30,18 +24,12 @@ const start = async () => {
     console.log(error);
   }
 
-   try {
-    const ch = await rabbitMQWrapper.connect();
-  } catch (err) {
-    console.log(err);
-  }
-
   try {
-    new ProductCreatedListener(rabbitMQWrapper.client).listen();
-  } catch (err) {
-    console.error(err)
-  }
- 
+    await rabbitMQWrapper.connect();
+    rabbitMQWrapper.client.on("error", console.error);
+} catch (err) {
+  console.log(err)
+}
  
 };
 

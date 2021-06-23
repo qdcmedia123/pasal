@@ -1,4 +1,3 @@
-import { Message, Channel } from "amqplib";
 import {AckOrNack} from 'rascal';
 import { Listener } from '../../common/base-listener';
 import { queueGroupName } from '../../common/queu-group-name';
@@ -10,8 +9,9 @@ export class ProductCreatedListener extends Listener< ProductCreatedEvent > {
     queueGroupName = queueGroupName;
     async onMessage(data: ProductCreatedEvent['data'], message:any, ackOrNack:AckOrNack) {
        
-         console.log(data);
+        //console.log(`Message received to ProductCreatedListener!`)  
+        //console.log(data);
        
-         ackOrNack();
+        ackOrNack();
     }
 }

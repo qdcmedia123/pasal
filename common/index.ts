@@ -12,3 +12,10 @@ export * from './middlewares/require-auth';
 export * from './middlewares/validate-request';
 export * from './middlewares/has-role';
 
+
+export * from './events/base-listener';
+export * from './events/base-publisher';
+export * from './events/subjects';
+export * from './events/product-created-event'
+
+export * from './config/rabbit-mq';
