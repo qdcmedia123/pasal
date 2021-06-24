@@ -7,11 +7,6 @@ import { ProductCreatedPublisher } from "../events/publishers/product-created-pu
 import { rabbitMQWrapper } from "../rabbitmq-wrapper";
 const router = express.Router();
 
-router.get("/api/products/v1/test", async(req, res) => {
-  res.send('Test is working');
-  // Hello
-});
-
 router.post(
   "/api/products/v1/new",
   requireAuth,
