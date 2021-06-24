@@ -6,7 +6,8 @@ interface ProudctAttr {
     price: number;
     userId: string;
     category: string;
-    sub_category: string;    
+    subCategory: string;  
+    availableItems: number;  
 }
 
 interface ProductDoc extends mongoose.Document {
@@ -14,8 +15,9 @@ interface ProductDoc extends mongoose.Document {
     price: number;
     userId: string;
     category: string;
-    sub_category: string;  
+    subCategory: string;  
     version: number;
+    availableItems: number;  
 }
 
 interface ProductModel extends mongoose.Model <ProductDoc> {
@@ -39,8 +41,15 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    sub_category: {
+    subCategory: {
         type: String,
+        required: true
+    },
+    mediaLinks: {
+        type: Array
+    },
+    availableItems: {
+        type: Number,
         required: true
     }
 }, {
